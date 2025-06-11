@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Password Strength Validator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+
+    input[type="password"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 300px;
+      margin-top: 10px;
+    }
+
+    .requirements {
+      text-align: left;
+      width: 300px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .requirements div {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .valid {
+      color: green;
+    }
+
+    .invalid {
+      color: red;
+    }
+
+    .strength-indicator {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔐 Password Strength Validator</h2>
+  <input type="password" id="password" placeholder="Enter password" oninput="validatePassword()">
+
+  <div class="requirements">
+    <div id="length" class="invalid">✗ At least 8 characters</div>
+    <div id="uppercase" class="invalid">✗ At least one uppercase letter</div>
+    <div id="lowercase" class="invalid">✗ At least one lowercase letter</div>
+    <div id="number" class="invalid">✗ At least one number</div>
+    <div id="special" class="invalid">✗ At least one special character</div>
+  </div>
+
+  <div id="strength" class="strength-indicator"></div>
+
+  <script>
+    function validatePassword() {
+      const password = document.getElementById("password").value;
+
+      const lengthCheck = password.length >= 8;
+      const upperCheck = /[A-Z]/.test(password);
+      const lowerCheck = /[a-z]/.test(password);
+      const numberCheck = /[0-9]/.test(password);
+      const specialCheck = /[^A-Za-z0-9]/.test(password);
+
+      document.getElementById("length").className = lengthCheck ? "valid" : "invalid";
+      document.getElementById("length").innerText = (lengthCheck ? "✓" : "✗") + " At least 8 characters";
+
+      document.getElementById("uppercase").className = upperCheck ? "valid" : "invalid";
+      document.getElementById("uppercase").innerText = (upperCheck ? "✓" : "✗") + " At least one uppercase letter";
+
+      document.getElementById("lowercase").className = lowerCheck ? "valid" : "invalid";
+      document.getElementById("lowercase").innerText = (lowerCheck ? "✓" : "✗") + " At least one lowercase letter";
+
+      document.getElementById("number").className = numberCheck ? "valid" : "invalid";
+      document.getElementById("number").innerText = (numberCheck ? "✓" : "✗") + " At least one number";
+
+      document.getElementById("special").className = specialCheck ? "valid" : "invalid";
+      document.getElementById("special").innerText = (specialCheck ? "✓" : "✗") + " At least one special character";
+
+      const totalScore = [lengthCheck, upperCheck, lowerCheck, numberCheck, specialCheck].filter(Boolean).length;
+
+      const strengthText = document.getElementById("strength");
+      if (totalScore === 5) {
+        strengthText.textContent = "Strength: Strong 💪";
+        strengthText.style.color = "green";
+      } else if (totalScore >= 3) {
+        strengthText.textContent = "Strength: Moderate ⚠️";
+        strengthText.style.color = "orange";
+      } else {
+        strengthText.textContent = "Strength: Weak ❌";
+        strengthText.style.color = "red";
+      }
+    }
+  </script>
+
+</body>
+</html>
